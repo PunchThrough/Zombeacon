@@ -1,6 +1,6 @@
 //
 //  ViewController.h
-//  BeaconTest
+//  Zombeacon (tm)
 //
 // Copyright (c) 2014, Punch Through Design, LLC
 // All rights reserved.

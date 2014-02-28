@@ -1,4 +1,4 @@
-Z O M B E A C O N
+Z O M B E A C O N (tm)
 
  Copyright (c) 2014, Punch Through Design, LLC
  All rights reserved.
