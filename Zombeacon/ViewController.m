@@ -200,12 +200,15 @@ NSString *const kBeaconIdentifier = @"com.punchthrough.zombeacon";
 // Starts monitoring for uninfected beacons and advertises itself as a zombeacon
 -(void)startBeaconingInfected
 {
+    [beaconManager stopAdvertising];
+    
     [locManager stopMonitoringForRegion:zomBeaconRegion];
     [locManager stopRangingBeaconsInRegion:zomBeaconRegion];
-    [beaconManager stopAdvertising];
+
     
     [locManager startMonitoringForRegion:beaconRegion];
     [locManager startRangingBeaconsInRegion:beaconRegion];
+    
     [beaconManager startAdvertising:zomBeaconAdvData];
 }
 
