@@ -38,23 +38,6 @@
 @implementation ViewController
 
 
-@synthesize beaconRegion;
-@synthesize zomBeaconRegion;
-@synthesize beaconManager;
-@synthesize beaconAdvData;
-@synthesize locManager;
-@synthesize zomBeaconAdvData;
-@synthesize lastProximity;
-@synthesize proxFilter;
-@synthesize isZombeacon;
-@synthesize zombieSounds;
-@synthesize audioPlayer;
-@synthesize zombiePlayFilter;
-@synthesize zombieImageBackground;
-@synthesize zombieBgColor;
-@synthesize rightRecognizer;
-@synthesize leftRecognizer;
-
 static const int kMajorUninfected = 0;
 static const int kMajorZombie = 1;
 static const int kProxFilterCount = 5;
@@ -72,88 +55,88 @@ NSString *const kBeaconIdentifier = @"com.punchthrough.zombeacon";
 	// Do any additional setup after loading the view, typically from a nib.
 
     // init primitives
-    proxFilter = 0;
-    isZombeacon = NO;
-    zombiePlayFilter = 0;
-    
+    self.proxFilter = 0;
+    self.isZombeacon = NO;
+    self.zombiePlayFilter = 0;
+
     // Set up beacons
-    
+
     // Used to calibrate proximity detection
     NSNumber *zomRssiAtOneMeter = [[NSNumber alloc] initWithInt:kZombieRssiAtOneMeter];
-    
+
     // This UUID is the unique identifier for all Zombeacons and Beacons that monitor for Zombeacons.
     NSUUID *proximityUUID = [[NSUUID alloc] initWithUUIDString:kBeaconUuid];
-    
+
     // Be sure to register the view controller as the location manager delegate to obtain callbacks
     // for beacon monitoring
-    locManager = [[CLLocationManager alloc] init];
-    locManager.delegate = self;
+    self.locManager = [[CLLocationManager alloc] init];
+    self.locManager.delegate = self;
 
     // Initialize the CBPeripheralManager.  Advertising comes later.
-    beaconManager = [[CBPeripheralManager alloc] initWithDelegate:self
+    self.beaconManager = [[CBPeripheralManager alloc] initWithDelegate:self
                                                             queue:nil
                                                           options:nil];
-    beaconManager.delegate = self;
-    
+    self.beaconManager.delegate = self;
+
     // These identify the beacon and Zombeacon regions used by CoreLocation
     // Notice that the proximity UUID and identifier are the same for each,
     // but that beacons and zombeacons have different major IDs.  We could
     // have used minor IDs in place of major IDs as well.
-    beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID
+    self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID
                                                             major:kMajorUninfected
                                                       identifier:kBeaconIdentifier];
-    
-    zomBeaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID
+
+    self.zomBeaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID
                                                               major:kMajorZombie
                                                          identifier:kBeaconIdentifier];
-    
+
     // Advertising NSDictionary objects created from the regions we defined
     // We add a local name for each, but it isn't a necessary step
-    beaconAdvData = [beaconRegion peripheralDataWithMeasuredPower:nil];
-    [beaconAdvData  setObject:@"Healthy Beacon"
+    self.beaconAdvData = [self.beaconRegion peripheralDataWithMeasuredPower:nil];
+    [self.beaconAdvData  setObject:@"Healthy Beacon"
                        forKey:CBAdvertisementDataLocalNameKey];
-    
-    zomBeaconAdvData = [zomBeaconRegion peripheralDataWithMeasuredPower:zomRssiAtOneMeter];
-    [zomBeaconAdvData setObject:@"Zombeacon"
+
+    self.zomBeaconAdvData = [self.zomBeaconRegion peripheralDataWithMeasuredPower:zomRssiAtOneMeter];
+    [self.zomBeaconAdvData setObject:@"Zombeacon"
                          forKey:CBAdvertisementDataLocalNameKey];
-    
+
 
     // Set up audio files for playback
     NSURL *zombieSoundMoanUrl = [[NSBundle mainBundle] URLForResource:@"ZombieMoan" withExtension:@"wav"];
     NSURL *zombieSoundAttackedUrl = [[NSBundle mainBundle] URLForResource:@"ZombieAttacked" withExtension:@"wav"];
     NSURL *zombieSoundMoan2Url = [[NSBundle mainBundle] URLForResource:@"ZombieMoan2" withExtension:@"mp3"];
     NSURL *zombieSoundMoan3Url = [[NSBundle mainBundle] URLForResource:@"zombieMoan3" withExtension:@"mp3"];
-    
-    zombieSounds = [NSArray arrayWithObjects:zombieSoundMoanUrl, zombieSoundMoan2Url,
+
+    self.zombieSounds = [NSArray arrayWithObjects:zombieSoundMoanUrl, zombieSoundMoan2Url,
                                              zombieSoundMoan3Url, zombieSoundAttackedUrl, nil];
-    
+
     // Set up the zombie background picture
     UIImage* zombiePattern = [UIImage imageNamed:@"ZombieTransparent.png"];
-    zombieBgColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.3];
-    zombieImageBackground = [[UIImageView alloc] initWithImage:zombiePattern];
-    zombieImageBackground.frame = self.view.bounds;
+    self.zombieBgColor = [UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.3];
+    self.zombieImageBackground = [[UIImageView alloc] initWithImage:zombiePattern];
+    self.zombieImageBackground.frame = self.view.bounds;
     // Initialize the opacity as essentially transparent
-    zombieImageBackground.alpha = kLightestZombieAlpha;
+    self.zombieImageBackground.alpha = kLightestZombieAlpha;
 
-    [self.view addSubview:zombieImageBackground];
-    [self.view sendSubviewToBack:zombieImageBackground];
-    
+    [self.view addSubview:self.zombieImageBackground];
+    [self.view sendSubviewToBack:self.zombieImageBackground];
+
     // set up gestures to turn on zombification.  Right for zombies, left for healthies
-    rightRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+    self.rightRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self
                                                                 action:@selector(rightSwipeHandle:)];
-    
-    rightRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
-    [rightRecognizer setNumberOfTouchesRequired:1];
-    
-    leftRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self
+
+    self.rightRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+    [self.rightRecognizer setNumberOfTouchesRequired:1];
+
+    self.leftRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self
                                                                action:@selector(leftSwipeHandle:)];
-    
-    leftRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
-    [leftRecognizer setNumberOfTouchesRequired:1];
-    
-    [self.view addGestureRecognizer:rightRecognizer];
-    [self.view addGestureRecognizer:leftRecognizer];
-    
+
+    self.leftRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+    [self.leftRecognizer setNumberOfTouchesRequired:1];
+
+    [self.view addGestureRecognizer:self.rightRecognizer];
+    [self.view addGestureRecognizer:self.leftRecognizer];
+
     // Start looking for zombies
     [self startBeaconingUninfected];
 }
@@ -164,52 +147,52 @@ NSString *const kBeaconIdentifier = @"com.punchthrough.zombeacon";
     if ( deliciousBrains )
     {
         // Create a zombeacon
-        zombieImageBackground.alpha = 1.0f;
-        zombieImageBackground.backgroundColor = zombieBgColor;
-        isZombeacon = true;
+        self.zombieImageBackground.alpha = 1.0f;
+        self.zombieImageBackground.backgroundColor = self.zombieBgColor;
+        self.isZombeacon = true;
         [self startBeaconingInfected];
     }
     else
     {
         // Switch back to a healthy lifestyle
-        zombieImageBackground.alpha = kLightestZombieAlpha;
-        zombieImageBackground.backgroundColor = [UIColor clearColor];
-        isZombeacon = false;
+        self.zombieImageBackground.alpha = kLightestZombieAlpha;
+        self.zombieImageBackground.backgroundColor = [UIColor clearColor];
+        self.isZombeacon = false;
         [self startBeaconingUninfected];
     }
-    
+
     // reset filter
-    proxFilter = 0;
+    self.proxFilter = 0;
 }
 
 // Starts monitoring for infected beacons and advertises itself as a healthy beacon
 -(void)startBeaconingUninfected
 {
     // Advertise as a healthy beacon
-    [beaconManager stopAdvertising];
-    
-    [locManager stopMonitoringForRegion:beaconRegion];
-    [locManager stopRangingBeaconsInRegion:beaconRegion];
-    
-    [locManager startMonitoringForRegion:zomBeaconRegion];
-    [locManager startRangingBeaconsInRegion:zomBeaconRegion];
-    
-    [beaconManager startAdvertising:beaconAdvData];
+    [self.beaconManager stopAdvertising];
+
+    [self.locManager stopMonitoringForRegion:self.beaconRegion];
+    [self.locManager stopRangingBeaconsInRegion:self.beaconRegion];
+
+    [self.locManager startMonitoringForRegion:self.zomBeaconRegion];
+    [self.locManager startRangingBeaconsInRegion:self.zomBeaconRegion];
+
+    [self.beaconManager startAdvertising:self.beaconAdvData];
 }
 
 // Starts monitoring for uninfected beacons and advertises itself as a zombeacon
 -(void)startBeaconingInfected
 {
-    [beaconManager stopAdvertising];
-    
-    [locManager stopMonitoringForRegion:zomBeaconRegion];
-    [locManager stopRangingBeaconsInRegion:zomBeaconRegion];
+    [self.beaconManager stopAdvertising];
 
-    
-    [locManager startMonitoringForRegion:beaconRegion];
-    [locManager startRangingBeaconsInRegion:beaconRegion];
-    
-    [beaconManager startAdvertising:zomBeaconAdvData];
+    [self.locManager stopMonitoringForRegion:self.zomBeaconRegion];
+    [self.locManager stopRangingBeaconsInRegion:self.zomBeaconRegion];
+
+
+    [self.locManager startMonitoringForRegion:self.beaconRegion];
+    [self.locManager startRangingBeaconsInRegion:self.beaconRegion];
+
+    [self.beaconManager startAdvertising:self.zomBeaconAdvData];
 }
 
 // For debug
@@ -233,58 +216,58 @@ NSString *const kBeaconIdentifier = @"com.punchthrough.zombeacon";
     {
         CLBeacon *nearestBeacon = [beacons firstObject];
 
-        lastProximity = nearestBeacon.proximity;
-        
+        self.lastProximity = nearestBeacon.proximity;
+
         // Change the opacity of the zombie hand image as an example of using the distance
         // reading returned by CoreLocation
-        if ( !isZombeacon)
+        if ( !self.isZombeacon)
         {
             //  assuming a reasonable max distance of kLongestBeaconDistance
             float newAlpha = ( kLongestBeaconDistance - nearestBeacon.accuracy ) / kLongestBeaconDistance;
-            
+
             // If accuracy is farther than kLongestBeaconDistance, set opacity to the lightest defined
             if ( newAlpha < kLightestZombieAlpha )
             {
                 newAlpha = kLightestZombieAlpha;
             }
-            
-            zombieImageBackground.alpha = newAlpha;
+
+            self.zombieImageBackground.alpha = newAlpha;
             NSLog(@"Nearest: %f", nearestBeacon.accuracy);
         }
-        
+
         // Debounce style filter - reset if proximity changes
         // This filter will ensure that a single reading of "Near" or "Immediate" doesn't
         // trigger a sound playback or beacon state switch immediately.  These are
         // George A. Romero style Zombeacons.
-        if (nearestBeacon.proximity != lastProximity)
+        if (nearestBeacon.proximity != self.lastProximity)
         {
-            proxFilter = 0;
+            self.proxFilter = 0;
         }
         else
         {
-            proxFilter++;
+            self.proxFilter++;
         }
-        
+
         // Beacon must be in a certain proximity for a set amount of time before triggering events
-        if ( proxFilter >= kProxFilterCount )
+        if ( self.proxFilter >= kProxFilterCount )
         {
             // If you are a zombeacon, and you notice a healthy beacon that is at least near to you,
             // groan as your hunger for brains is all consuming
-            if ( isZombeacon
+            if ( self.isZombeacon
                 && ( CLProximityNear == nearestBeacon.proximity
                     || CLProximityImmediate == nearestBeacon.proximity ) )
             {
-                zombiePlayFilter++;
-                
-                 if ( zombiePlayFilter >= kZombiePlayDelay )
+                self.zombiePlayFilter++;
+
+                 if ( self.zombiePlayFilter >= kZombiePlayDelay )
                  {
                      // Make sound
                      [self playRandomZombieSound];
-                     zombiePlayFilter = 0;
+                     self.zombiePlayFilter = 0;
                  }
             }
             // The healthy beacon is bit if the zombeacon is at an immediate distance
-            else if ( !isZombeacon && CLProximityImmediate == nearestBeacon.proximity )
+            else if ( !self.isZombeacon && CLProximityImmediate == nearestBeacon.proximity )
             {
                 // Become a zombeacon!
                 [self playBite];
@@ -323,13 +306,13 @@ NSString *const kBeaconIdentifier = @"com.punchthrough.zombeacon";
 // Randomized playback using AVFoundation Framework
 -(void)playRandomZombieSound
 {
-    uint16_t randSoundIdx = random() % [zombieSounds count];
+    uint16_t randSoundIdx = random() % [self.zombieSounds count];
     NSError *error = nil;
-    
-    audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:zombieSounds[randSoundIdx]
+
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:self.zombieSounds[randSoundIdx]
                                                          error:&error];
-    [audioPlayer prepareToPlay];
-    [audioPlayer play];
+    [self.audioPlayer prepareToPlay];
+    [self.audioPlayer play];
 }
 
 // Always play the same sound for a bite
@@ -337,11 +320,11 @@ NSString *const kBeaconIdentifier = @"com.punchthrough.zombeacon";
 {
     NSURL *zombieSoundBiteUrl = [[NSBundle mainBundle] URLForResource:@"ZombieBite2"
                                                         withExtension:@"mp3"];
-    
-    audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:zombieSoundBiteUrl
+
+    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:zombieSoundBiteUrl
                                                          error:nil];
-    [audioPlayer prepareToPlay];
-    [audioPlayer play];
+    [self.audioPlayer prepareToPlay];
+    [self.audioPlayer play];
 }
 
 - (void)didReceiveMemoryWarning
