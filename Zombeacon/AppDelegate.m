@@ -30,14 +30,44 @@
 
 #import "AppDelegate.h"
 
+@interface AppDelegate()
+
+
+@property (strong, nonatomic) CLLocationManager *locManager;
+
+@end
+
 @implementation AppDelegate
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    self.locManager = [[CLLocationManager alloc] init];
+    self.locManager.delegate = self;
+    
     return YES;
 }
-							
+
+// This method will provide notifications to the user when the application is running in the background
+- (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
+{
+
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    
+    if(state == CLRegionStateInside)
+    {
+        notification.alertBody = NSLocalizedString(@"Braaaiiiiins", @"");
+    }
+    else
+    {
+        return;
+    }
+    
+    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+}
+
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

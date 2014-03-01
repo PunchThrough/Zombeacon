@@ -29,9 +29,28 @@
 //
 
 #import "ViewController.h"
+#import <AVFoundation/AVFoundation.h>
+#import <CoreBluetooth/CoreBluetooth.h>
+#import <CoreLocation/CoreLocation.h>
 
-@interface ViewController ()
+@interface ViewController () <CBPeripheralManagerDelegate, CLLocationManagerDelegate>
 
+@property (strong, nonatomic) CLBeaconRegion *beaconRegion;
+@property (strong, nonatomic) CLBeaconRegion *zomBeaconRegion;
+@property (strong, nonatomic) CBPeripheralManager *beaconManager;
+@property (strong, nonatomic) NSMutableDictionary *beaconAdvData;
+@property (strong, nonatomic) NSMutableDictionary *zomBeaconAdvData;
+@property (strong, nonatomic) CLLocationManager *locManager;
+@property (assign, nonatomic) CLProximity lastProximity;
+@property (assign, nonatomic) int proxFilter;
+@property (assign, nonatomic) bool isZombeacon;
+@property (strong, nonatomic) NSArray *zombieSounds;
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
+@property (assign, nonatomic) int zombiePlayFilter;
+@property (strong, nonatomic) UIImageView *zombieImageBackground;
+@property (strong, nonatomic) UIColor *zombieBgColor;
+@property (strong, nonatomic) UISwipeGestureRecognizer *rightRecognizer;
+@property (strong, nonatomic) UISwipeGestureRecognizer *leftRecognizer;
 
 @end
 
