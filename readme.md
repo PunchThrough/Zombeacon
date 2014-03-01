@@ -10,9 +10,8 @@ WTF is a zomBeacon?
 -------------------
 
 In short, a zomBeacon is a beacon that turns normal healthy beacons
-into other zomBeacons.  Healthy beacons are beacons that cannot
-modify other beacons behavior, but are receptive to the zomBeacon
-horde.
+into other zomBeacons.  Healthy beacons are beacons that are receptive 
+to the zomBeacon horde.
 
 Proximity event driven behavior
 -------------------------------
