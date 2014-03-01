@@ -63,7 +63,7 @@ AppDelegate.h
 @interface AppDelegate : UIResponder <UIApplicationDelegate, CLLocationManagerDelegate>
 ```
 
-Now, create a CLLocation manager in AppDelegate.c:
+Now, create a CLLocation manager in AppDelegate.m:
 
 ```objective-c
 @interface AppDelegate()
