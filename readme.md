@@ -20,7 +20,7 @@ Proximity event driven behavior
 A healthy beacon turns into a zomBeacon when it is close to a zomBeacon.  
 We further identify how close a healthy beacon is to sensed zomBeacons by changing the opacity of a zombie hand background image; if it's pretty far away from the zomBeacon, the hand is barely visible, and if it's near, say 3-4 meters, the hand is impossible to miss.  
 
-A zomBeacon will make its all consuming hunger for brains known to the wider world by audibly groaning when it sense that a healthy beacon is near.
+A zomBeacon will make its all consuming hunger for brains known to the wider world by audibly groaning when it senses that a healthy beacon is near.
 
 Why?
 ----
