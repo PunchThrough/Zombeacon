@@ -72,7 +72,7 @@ Now, create a CLLocation manager in AppDelegate.c:
 }
 ```
 
-Now, use the CLLocationManager delegate method didDetermineState: forRegion: to capture when a beacon enters its zone.  The rest of the beacon
+Use the CLLocationManager delegate method didDetermineState: forRegion: to capture when a beacon enters its zone.  The rest of the beacon
 setup will happen later, in our ViewController.
 
 ```objective-c
@@ -93,6 +93,17 @@ setup will happen later, in our ViewController.
     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
 }
 ```
+
+### ViewController
+
+The view controller also needs to be configured as a CLLocationManager delegate to capture when specific beacons are in range so that you
+can get their distance and other properties.  In addition to being
+a CLLocationManager delegate, we have it act as a CBPeripheralManager delegate so we can capture beacon setup events useful for debugging.
+
+```objective-c
+@interface ViewController () <CBPeripheralManagerDelegate, CLLocationManagerDelegate>
+```
+
 
  Copyright (c) 2014, Punch Through Design, LLC
  All rights reserved.
