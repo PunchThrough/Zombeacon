@@ -12,7 +12,15 @@ WTF is a zomBeacon?
 In short, a zomBeacon is a beacon that turns normal healthy beacons
 into other zomBeacons.  Healthy beacons are beacons that cannot
 modify other beacons behavior, but are receptive to the zomBeacon
-horde.  
+horde.
+
+Proximity event driven behavior
+-------------------------------
+
+A healthy beacon turns into a zomBeacon when it is close to a zomBeacon.  
+We further identify how close a healthy beacon is to sensed zomBeacons by changing the opacity of a zombie hand background image; if it's pretty far away from the zomBeacon, the hand is barely visible, and if it's near, say 3-4 meters, the hand is impossible to miss.  
+
+A zomBeacon will make its all consuming hunger for brains known to the wider world by audibly groaning when it sense that a healthy beacon is near.
 
 Why?
 ----
@@ -34,7 +42,9 @@ when suddenly, when a healthy "Hello, world!" beacon appears, it triggers an int
 
 How?
 ----
-In the following sections we'll explore how to set up a zomBeacon.
+In the following sections we'll explore how to set up a bi-directional
+beacon.  We'll mainly focus on beacon setup, and leave some of the
+other features of the code, such as gesture based events, to the comments in the code itself.
 
 ### CoreLocation and CoreBluetooth
 
@@ -104,9 +114,173 @@ a CLLocationManager delegate, we have it act as a CBPeripheralManager delegate s
 @interface ViewController () <CBPeripheralManagerDelegate, CLLocationManagerDelegate>
 ```
 
+Now we setup the CoreLocation and CoreBluetooth associated properties
 
- Copyright (c) 2014, Punch Through Design, LLC
- All rights reserved.
+```objective-c
+// Location Manager Associated Types and primitives
+@property (strong, nonatomic) CLLocationManager *locManager;
+@property (strong, nonatomic) CLBeaconRegion *beaconRegion;
+@property (strong, nonatomic) CLBeaconRegion *zomBeaconRegion;
+@property (assign, nonatomic) CLProximity lastProximity;
+
+// Peripheral Manager Associated Types
+@property (strong, nonatomic) CBPeripheralManager *beaconManager;
+@property (strong, nonatomic) NSMutableDictionary *beaconAdvData;
+@property (strong, nonatomic) NSMutableDictionary *zomBeaconAdvData;
+```
+
+We setup some constants to help us configure the beacons.  These constants refer to fields in the CLBeaconRegion class.
+
+```objective-c
+// Beacon configuration
+static const int kMajorUninfected = 0;
+static const int kMajorZombie = 1;
+NSString *const kBeaconUuid = @"95C8A575-0354-4ADE-8C6C-33E72CD84E9F";
+NSString *const kBeaconIdentifier = @"com.punchthrough.zombeacon";
+```
+
+kBeaconUuid is the proximity UUID assigned to our zomBeacons and beacons
+that recognize our zomBeacons.  These are the IDs that differentiate your beacon types from other beacon types.  So if you are creating an app that responds to your beacons, you would differentiate your beacons from other beacons by using the proximity UUID.  You can generate your own UUID by typing 'uuidgen' into your OS X terminal. 
+
+After your app identifies your beacon proximity UUID, you can further provide further information about the beacon by using the MajorID and MinorID properties.  In this example, we're just using the MajorID to state whether the beacon is a healthy beacon (0) or a zomBeacon (1).  
+
+Finally, the identifier gives CoreLocation a means to associate the beacon with your project.
+
+Next, we initialize our CoreLocationManager, PeripheralManager, and assign the ViewController as a delegate to both of them in our ViewDidLoad method:
+
+```objective-c
+    // Be sure to register the view controller as the location manager delegate to obtain callbacks
+
+    // for beacon monitoring
+    self.locManager = [[CLLocationManager alloc] init];
+    self.locManager.delegate = self;
+
+    // Initialize the CBPeripheralManager.  Advertising comes later.
+    self.beaconManager = [[CBPeripheralManager alloc] initWithDelegate:self
+                                                            queue:nil
+                                                          options:nil];
+    self.beaconManager.delegate = self;
+```
+
+Now that these are ready to go, we set up our beacon regions:
+
+```objective-c
+    // These identify the beacon and Zombeacon regions used by CoreLocation
+    // Notice that the proximity UUID and identifier are the same for each,
+    // but that beacons and zombeacons have different major IDs.  We could
+    // have used minor IDs in place of major IDs as well.
+    self.beaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID
+                                                            major:kMajorUninfected
+                                                      identifier:kBeaconIdentifier];
+
+    self.zomBeaconRegion = [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID
+                                                              major:kMajorZombie
+                                                         identifier:kBeaconIdentifier];
+
+```
+
+The CLBeaconRegion is kind enough to help in creating the advertising configuration for our beacons.  peripheralDataWithMeasurePower: allows us to 
+calibrate our beacons at 1 meter.  Experimentally, we found that an RSSI
+value of -65db was read between iPhones while we were standing a meter apart.
+
+```objective-c
+    // Advertising NSDictionary objects created from the regions we defined
+    // We add a local name for each, but it isn't a necessary step
+    self.beaconAdvData = [self.beaconRegion peripheralDataWithMeasuredPower:zomRssiAtOneMeter];
+    [self.beaconAdvData  setObject:@"Healthy Beacon"
+                            forKey:CBAdvertisementDataLocalNameKey];
+
+    self.zomBeaconAdvData = [self.zomBeaconRegion peripheralDataWithMeasuredPower:zomRssiAtOneMeter];
+    [self.zomBeaconAdvData setObject:@"Zombeacon"
+                              forKey:CBAdvertisementDataLocalNameKey];
+```
+
+That's it.  We're ready to start beaconing.  To do so, we give CBPeripheralManager our beacon advertising data and tell it to start advertising.  Then, we tell CoreLocation manager to start looking for a particular type of beacon.  Notice we use both startMonitoringForRegions: and startRangingBeaconsInRegion:.  startMonitoringForRegion will notify us whenever we enter or leave a beacons zone, while startRangingBeaconsInRegion will give us more proximity information about the beacons it locates.
+
+```objective-c
+    // Start looking for zombies
+    [self startBeaconingUninfected];
+```
+
+```objective-c
+// Starts monitoring for infected beacons and advertises itself as a healthy beacon
+-(void)startBeaconingUninfected
+{
+    // Advertise as a healthy beacon
+    [self.beaconManager stopAdvertising];
+
+    [self.locManager stopMonitoringForRegion:self.beaconRegion];
+    [self.locManager stopRangingBeaconsInRegion:self.beaconRegion];
+
+    [self.locManager startMonitoringForRegion:self.zomBeaconRegion];
+    [self.locManager startRangingBeaconsInRegion:self.zomBeaconRegion];
+
+    [self.beaconManager startAdvertising:self.beaconAdvData];
+}
+```
+
+Whenever CoreLocation manager finds one of our zomBeacons, it will call the delegate method didRangeBeacons: inRegion:.  CoreLocation will give us a list of beacons that match the beacon region we defined; it doesn't just look for the proximity ID, but for the major and minor IDs we defined as well.
+
+```objective-c
+// This is the method for discovering our beacons.  It looks for the beacons that we defined
+// the regions for in ViewDidLoad.
+- (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
+{
+    // We're only concerned with the nearest beacon, which is always the first object
+    if ([beacons count] > 0)
+    {
+        CLBeacon *nearestBeacon = [beacons firstObject];
+
+```
+
+The general steps are:
+
+1. Get the beacon count.
+2. Determine the nearest beacon, which is always the first one in the list.
+3. Change the opacity of our zombie image by 
+
+Now that we have a CLBeacon object, we can query it for an approximate distance to us by using the CLBeacon accuracy property.  We're using the distance in our code to set the opacity of the zombie hand that's used as our image background. The opacity gives a sense of distance to sensed zombeacons:
+
+```objective-c
+            //  assuming a reasonable max distance of kLongestBeaconDistance
+            float newAlpha = ( kLongestBeaconDistance - nearestBeacon.accuracy ) / kLongestBeaconDistance;
+```
+
+Lastly, our event driven behavior, and our beacon role switching is determined by querying the CLBeacon for its proximity, which is split up into four areas: Immediate, Near, Far, and Unknown.  
+
+```objective-c
+            // If you are a zombeacon, and you notice a healthy beacon that is at least near to you,
+            // groan as your hunger for brains is all consuming
+            if ( self.isZombeacon
+                && ( CLProximityNear == nearestBeacon.proximity
+                    || CLProximityImmediate == nearestBeacon.proximity ) )
+            {
+                self.zombiePlayFilter++;
+
+                 if ( self.zombiePlayFilter >= kZombiePlayDelay )
+                 {
+                     // Make sound
+                     [self playRandomZombieSound];
+                     self.zombiePlayFilter = 0;
+                 }
+            }
+            // The healthy beacon is bit if the zombeacon is at an immediate distance
+            else if ( !self.isZombeacon && CLProximityImmediate == nearestBeacon.proximity )
+            {
+                // Become a zombeacon!
+                [self playBite];
+                [self brainsAreTasty:YES];
+            }
+```
+
+We're performing some simple filtering of our events, so that we don't, say, keep groaning for brains every second that this method is called.  For a zombeacon, we check whether we are at least near a healthy beacon.  If we are, we groan as our hunger for brains is insatiable.  If we're a healthy beacon, and we notice a zombeacon that's immediate to us, it's too late for us--a bite is registered and we switch our role to that of a zomBeacon.    
+
+Have fun exploring the rest of the code!  Hopefully this gives enough info to get up and running with iBeacon technology and helps others to continue exploring this idea of dynamic beaconing.
+
+### License Stuff (FreeBSD based)
+
+Copyright (c) 2014, Punch Through Design, LLC
+All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:

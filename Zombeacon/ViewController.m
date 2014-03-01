@@ -35,37 +35,50 @@
 
 @interface ViewController () <CBPeripheralManagerDelegate, CLLocationManagerDelegate>
 
+// Location Manager Associated Types and primitives
+@property (strong, nonatomic) CLLocationManager *locManager;
 @property (strong, nonatomic) CLBeaconRegion *beaconRegion;
 @property (strong, nonatomic) CLBeaconRegion *zomBeaconRegion;
+@property (assign, nonatomic) CLProximity lastProximity;
+@property (assign, nonatomic) int proxFilter;
+
+// Peripheral Manager Associated Types
 @property (strong, nonatomic) CBPeripheralManager *beaconManager;
 @property (strong, nonatomic) NSMutableDictionary *beaconAdvData;
 @property (strong, nonatomic) NSMutableDictionary *zomBeaconAdvData;
-@property (strong, nonatomic) CLLocationManager *locManager;
-@property (assign, nonatomic) CLProximity lastProximity;
-@property (assign, nonatomic) int proxFilter;
-@property (assign, nonatomic) bool isZombeacon;
+
+// AVFoundation Framework
 @property (strong, nonatomic) NSArray *zombieSounds;
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 @property (assign, nonatomic) int zombiePlayFilter;
+
+// Zombie images and gesture based state changes
 @property (strong, nonatomic) UIImageView *zombieImageBackground;
 @property (strong, nonatomic) UIColor *zombieBgColor;
 @property (strong, nonatomic) UISwipeGestureRecognizer *rightRecognizer;
 @property (strong, nonatomic) UISwipeGestureRecognizer *leftRecognizer;
+@property (assign, nonatomic) bool isZombeacon;
 
 @end
 
+
 @implementation ViewController
 
+// Constants
 
+// Beacon configuration
 static const int kMajorUninfected = 0;
 static const int kMajorZombie = 1;
+NSString *const kBeaconUuid = @"95C8A575-0354-4ADE-8C6C-33E72CD84E9F";
+NSString *const kBeaconIdentifier = @"com.punchthrough.zombeacon";
+
+// Filters and view opacity
 static const int kProxFilterCount = 5;
 static const int kZombieRssiAtOneMeter = -65;
 static const int kZombiePlayDelay = 5;
 static const float kLongestBeaconDistance = 4.0;
 static const float kLightestZombieAlpha = 0.05f;
-NSString *const kBeaconUuid = @"95C8A575-0354-4ADE-8C6C-33E72CD84E9F";
-NSString *const kBeaconIdentifier = @"com.punchthrough.zombeacon";
+
 
 
 - (void)viewDidLoad
@@ -111,13 +124,13 @@ NSString *const kBeaconIdentifier = @"com.punchthrough.zombeacon";
 
     // Advertising NSDictionary objects created from the regions we defined
     // We add a local name for each, but it isn't a necessary step
-    self.beaconAdvData = [self.beaconRegion peripheralDataWithMeasuredPower:nil];
+    self.beaconAdvData = [self.beaconRegion peripheralDataWithMeasuredPower:zomRssiAtOneMeter];
     [self.beaconAdvData  setObject:@"Healthy Beacon"
-                       forKey:CBAdvertisementDataLocalNameKey];
+                            forKey:CBAdvertisementDataLocalNameKey];
 
     self.zomBeaconAdvData = [self.zomBeaconRegion peripheralDataWithMeasuredPower:zomRssiAtOneMeter];
     [self.zomBeaconAdvData setObject:@"Zombeacon"
-                         forKey:CBAdvertisementDataLocalNameKey];
+                              forKey:CBAdvertisementDataLocalNameKey];
 
 
     // Set up audio files for playback
@@ -213,6 +226,7 @@ NSString *const kBeaconIdentifier = @"com.punchthrough.zombeacon";
 
     [self.beaconManager startAdvertising:self.zomBeaconAdvData];
 }
+
 
 // For debug
 - (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral
