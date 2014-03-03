@@ -142,7 +142,7 @@ NSString *const kBeaconIdentifier = @"com.punchthrough.zombeacon";
 kBeaconUuid is the proximity UUID assigned to our zomBeacons and beacons
 that recognize our zomBeacons.  These are the IDs that differentiate your beacon types from other beacon types.  So if you are creating an app that responds to your beacons, you would differentiate your beacons from other beacons by using the proximity UUID.  You can generate your own UUID by typing 'uuidgen' into your OS X terminal. 
 
-After your app identifies your beacon proximity UUID, you can further provide further information about the beacon by using the MajorID and MinorID properties.  In this example, we're just using the MajorID to state whether the beacon is a healthy beacon (0) or a zomBeacon (1).  
+After your app identifies your beacon proximity UUID, you can provide further information about the beacon by using the MajorID and MinorID properties.  In this example, we're just using the MajorID to state whether the beacon is a healthy beacon (0) or a zomBeacon (1).  
 
 Finally, the identifier gives CoreLocation a means to associate the beacon with your project.
 
@@ -233,11 +233,7 @@ Whenever CoreLocation manager finds one of our zomBeacons, it will call the dele
 
 ```
 
-The general steps are:
-
-1. Get the beacon count.
-2. Determine the nearest beacon, which is always the first one in the list.
-3. Change the opacity of our zombie image by 
+The code above gets the beacon count and grabs the first beacon from the list which is always the one closest to us.
 
 Now that we have a CLBeacon object, we can query it for an approximate distance to us by using the CLBeacon accuracy property.  We're using the distance in our code to set the opacity of the zombie hand that's used as our image background. The opacity gives a sense of distance to sensed zombeacons:
 
@@ -273,7 +269,7 @@ Lastly, our event driven behavior, and our beacon role switching is determined b
             }
 ```
 
-We're performing some simple filtering of our events, so that we don't, say, keep groaning for brains every second that this method is called.  For a zombeacon, we check whether we are at least near a healthy beacon.  If we are, we groan as our hunger for brains is insatiable.  If we're a healthy beacon, and we notice a zombeacon that's immediate to us, it's too late for us--a bite is registered and we switch our role to that of a zomBeacon.    
+We're performing some simple filtering of our events, so that we don't, say, keep groaning for brains every second that this method is called.  For a zomBeacon, we check whether we are at least near a healthy beacon.  If we are, we groan as our hunger for brains is insatiable.  If we're a healthy beacon, and we notice a zomBeacon that's immediate to us, it's too late for us--a bite is registered and we switch our role to that of a zomBeacon.    
 
 Have fun exploring the rest of the code!  Hopefully this gives enough info to get up and running with iBeacon technology and helps others to continue exploring this idea of dynamic beaconing.
 
