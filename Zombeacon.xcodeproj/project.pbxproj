@@ -28,8 +28,6 @@
 		67E05A9C18BC3A9700F0AFD8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67E05A9B18BC3A9700F0AFD8 /* XCTest.framework */; };
 		67E05A9D18BC3A9700F0AFD8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67E05A7C18BC3A9700F0AFD8 /* Foundation.framework */; };
 		67E05A9E18BC3A9700F0AFD8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67E05A8018BC3A9700F0AFD8 /* UIKit.framework */; };
-		67E05AA618BC3A9700F0AFD8 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 67E05AA418BC3A9700F0AFD8 /* InfoPlist.strings */; };
-		67E05AA818BC3A9700F0AFD8 /* ZombeaconTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 67E05AA718BC3A9700F0AFD8 /* ZombeaconTests.m */; };
 		67E05AB218BC3BCC00F0AFD8 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67E05AB118BC3BCC00F0AFD8 /* CoreBluetooth.framework */; };
 		67E05AB418BC3BD200F0AFD8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67E05AB318BC3BD200F0AFD8 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
@@ -70,9 +68,6 @@
 		67E05A8A18BC3A9700F0AFD8 /* Zombeacon-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Zombeacon-Prefix.pch"; path = "Zombeacon/Zombeacon-Prefix.pch"; sourceTree = "<group>"; };
 		67E05A9A18BC3A9700F0AFD8 /* ZombeaconTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZombeaconTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		67E05A9B18BC3A9700F0AFD8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		67E05AA318BC3A9700F0AFD8 /* ZombeaconTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ZombeaconTests-Info.plist"; sourceTree = "<group>"; };
-		67E05AA518BC3A9700F0AFD8 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		67E05AA718BC3A9700F0AFD8 /* ZombeaconTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZombeaconTests.m; sourceTree = "<group>"; };
 		67E05AB118BC3BCC00F0AFD8 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		67E05AB318BC3BD200F0AFD8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -124,7 +119,6 @@
 			isa = PBXGroup;
 			children = (
 				67E05A8218BC3A9700F0AFD8 /* Zombeacon */,
-				67E05AA118BC3A9700F0AFD8 /* ZombeaconTests */,
 				67E05A7B18BC3A9700F0AFD8 /* Frameworks */,
 				67E05A7A18BC3A9700F0AFD8 /* Products */,
 				67C6B91618BF155600075191 /* Resources */,
@@ -176,25 +170,6 @@
 				67211E0D18C1206700262280 /* main.m */,
 				67E05A8418BC3A9700F0AFD8 /* Zombeacon-Info.plist */,
 				67E05A8A18BC3A9700F0AFD8 /* Zombeacon-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		67E05AA118BC3A9700F0AFD8 /* ZombeaconTests */ = {
-			isa = PBXGroup;
-			children = (
-				67E05AA718BC3A9700F0AFD8 /* ZombeaconTests.m */,
-				67E05AA218BC3A9700F0AFD8 /* Supporting Files */,
-			);
-			name = ZombeaconTests;
-			path = BeaconTestTests;
-			sourceTree = "<group>";
-		};
-		67E05AA218BC3A9700F0AFD8 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				67E05AA318BC3A9700F0AFD8 /* ZombeaconTests-Info.plist */,
-				67E05AA418BC3A9700F0AFD8 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -293,7 +268,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67E05AA618BC3A9700F0AFD8 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,7 +288,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67E05AA818BC3A9700F0AFD8 /* ZombeaconTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,14 +314,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				670EBA6718C123BE00704B6B /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		67E05AA418BC3A9700F0AFD8 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				67E05AA518BC3A9700F0AFD8 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

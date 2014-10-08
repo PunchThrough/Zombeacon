@@ -12,26 +12,38 @@
 	<dict>
 		<key>32C65A91-FC2E-4C42-9D9F-94B5AD372D55</key>
 		<string>https://github.com/PunchThrough/Zombeacon.git</string>
+		<key>4B41B48012F688046930219CD826F1394CBB6265</key>
+		<string>https://github.com/PunchThrough/Zombeacon.git</string>
 		<key>71968D7C-387F-4D19-AC53-533F4B6BEEBC</key>
-		<string>ubuntu@ec2-50-19-205-244.compute-1.amazonaws.com:~/gitrepo/xcode.git</string>
+		<string>ec2-50-19-205-244.compute-1.amazonaws.com:~/gitrepo/xcode.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Zombeacon/Zombeacon.xcodeproj/project.xcworkspace</string>
+	<string>Zombeacon.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>32C65A91-FC2E-4C42-9D9F-94B5AD372D55</key>
+		<string>../../../../..</string>
+		<key>4B41B48012F688046930219CD826F1394CBB6265</key>
 		<string>../..</string>
 		<key>71968D7C-387F-4D19-AC53-533F4B6BEEBC</key>
-		<string>../../..</string>
+		<string>../../../iOs</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/PunchThrough/Zombeacon.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>71968D7C-387F-4D19-AC53-533F4B6BEEBC</string>
+	<string>4B41B48012F688046930219CD826F1394CBB6265</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>32C65A91-FC2E-4C42-9D9F-94B5AD372D55</string>
+			<key>IDESourceControlWCCName</key>
+			<string>..</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
@@ -44,7 +56,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>32C65A91-FC2E-4C42-9D9F-94B5AD372D55</string>
+			<string>4B41B48012F688046930219CD826F1394CBB6265</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Zombeacon</string>
 		</dict>
