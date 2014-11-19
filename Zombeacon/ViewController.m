@@ -69,7 +69,8 @@
 // Beacon configuration
 static const int kMajorUninfected = 0;
 static const int kMajorZombie = 1;
-NSString *const kBeaconUuid = @"95C8A575-0354-4ADE-8C6C-33E72CD84E9F";
+//NSString *const kBeaconUuid = @"95C8A575-0354-4ADE-8C6C-33E72CD84E9F";
+NSString *const kBeaconUuid = @"A495FF10-C5B1-4B44-B512-1370F02D74DE";
 NSString *const kBeaconIdentifier = @"com.punchthrough.zombeacon";
 
 // Filters and view opacity
@@ -103,6 +104,10 @@ static const float kLightestZombieAlpha = 0.05f;
     // for beacon monitoring
     self.locManager = [[CLLocationManager alloc] init];
     self.locManager.delegate = self;
+    
+#ifdef __IPHONE_8_0
+    [self.locManager requestAlwaysAuthorization];
+#endif
 
     // Initialize the CBPeripheralManager.  Advertising comes later.
     self.beaconManager = [[CBPeripheralManager alloc] initWithDelegate:self
