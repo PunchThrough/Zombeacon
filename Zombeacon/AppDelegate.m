@@ -45,7 +45,13 @@
     // Override point for customization after application launch.
     self.locManager = [[CLLocationManager alloc] init];
     self.locManager.delegate = self;
-    
+
+    // Register for local notifications in iOS 8+.
+    #ifdef __IPHONE_8_0
+        UIUserNotificationType notificationTypes = UIUserNotificationTypeAlert | UIUserNotificationTypeSound;
+        [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil]];
+    #endif
+
     return YES;
 }
 
