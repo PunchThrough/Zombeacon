@@ -51,6 +51,9 @@
         UIUserNotificationType notificationTypes = UIUserNotificationTypeAlert | UIUserNotificationTypeSound;
         [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil]];
     #endif
+    
+    
+    //temp location testing - delete and store locs better in future.
 
     return YES;
 }

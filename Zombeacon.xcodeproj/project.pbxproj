@@ -30,6 +30,7 @@
 		67E05A9E18BC3A9700F0AFD8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67E05A8018BC3A9700F0AFD8 /* UIKit.framework */; };
 		67E05AB218BC3BCC00F0AFD8 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67E05AB118BC3BCC00F0AFD8 /* CoreBluetooth.framework */; };
 		67E05AB418BC3BD200F0AFD8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67E05AB318BC3BD200F0AFD8 /* CoreLocation.framework */; };
+		6F2E72831A5F44BE00F85FE6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F2E72821A5F44BE00F85FE6 /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		67E05A9B18BC3A9700F0AFD8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		67E05AB118BC3BCC00F0AFD8 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		67E05AB318BC3BD200F0AFD8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		6F2E72821A5F44BE00F85FE6 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F2E72831A5F44BE00F85FE6 /* MapKit.framework in Frameworks */,
 				67C6B91818BF1A3400075191 /* AVFoundation.framework in Frameworks */,
 				67E05AB418BC3BD200F0AFD8 /* CoreLocation.framework in Frameworks */,
 				67E05AB218BC3BCC00F0AFD8 /* CoreBluetooth.framework in Frameworks */,
@@ -137,6 +140,7 @@
 		67E05A7B18BC3A9700F0AFD8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6F2E72821A5F44BE00F85FE6 /* MapKit.framework */,
 				67C6B91718BF1A3400075191 /* AVFoundation.framework */,
 				67E05AB318BC3BD200F0AFD8 /* CoreLocation.framework */,
 				67E05AB118BC3BCC00F0AFD8 /* CoreBluetooth.framework */,
