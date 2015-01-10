@@ -91,6 +91,7 @@ static const float kLightestZombieAlpha = 0.05f;
     self.proxFilter = 0;
     self.isZombeacon = NO;
     self.zombiePlayFilter = 0;
+    
 
     // Set up beacons
 
@@ -252,9 +253,14 @@ static const float kLightestZombieAlpha = 0.05f;
     // We're only concerned with the nearest beacon, which is always the first object
     if ([beacons count] > 0)
     {
+        
+        [self logCurrentLocation];
+
         CLBeacon *nearestBeacon = [beacons firstObject];
 
         self.lastProximity = nearestBeacon.proximity;
+        
+        
 
         // Change the opacity of the zombie hand image as an example of using the distance
         // reading returned by CoreLocation
@@ -354,7 +360,7 @@ static const float kLightestZombieAlpha = 0.05f;
 }
 
 // Always play the same sound for a bite
--(void)playBite
+- (void)playBite
 {
     NSURL *zombieSoundBiteUrl = [[NSBundle mainBundle] URLForResource:@"ZombieBite2"
                                                         withExtension:@"mp3"];
@@ -364,6 +370,54 @@ static const float kLightestZombieAlpha = 0.05f;
     [self.audioPlayer prepareToPlay];
     [self.audioPlayer play];
 }
+
+
+- (void)addTupleToUserDefaults:(NSArray *)tuple{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *coordArray = [defaults objectForKey:@"coords"];
+    NSMutableArray *tempCoordArray = [coordArray mutableCopy];
+    
+    //Check if tuple is more than a certain distance away.
+    BOOL pointValid = true;
+    CLLocation *potentialLocation = [[CLLocation alloc] initWithLatitude:[tuple[0] doubleValue] longitude:[tuple[1] doubleValue]];
+    for (NSArray *oldTuple in coordArray){
+        CLLocation *oldLocation = [[CLLocation alloc] initWithLatitude:[oldTuple[0] doubleValue] longitude:[oldTuple[1] doubleValue]];
+//        NSLog(@"Distance between old and new location: %f", [oldLocation distanceFromLocation:potentialLocation]);
+        if([oldLocation distanceFromLocation:potentialLocation] < 50){//don't add locations <50m from one another
+            pointValid = false;
+        }
+    }
+ 
+    if(pointValid){
+        NSLog(@"Location added!");
+        [tempCoordArray addObject:tuple];
+        NSArray *newCoordArray = [NSArray arrayWithArray:tempCoordArray];
+        [defaults setObject:newCoordArray forKey:@"coords"];
+    }
+}
+
+-(void)logCurrentLocation{
+    CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+    if ([locationManager locationServicesEnabled])
+    {
+        locationManager.delegate = self;
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        locationManager.distanceFilter = kCLDistanceFilterNone;
+        [locationManager startUpdatingLocation];
+    }
+    
+    
+    CLLocation *location = [locationManager location];
+    CLLocationCoordinate2D coordinate = [location coordinate];
+    
+    NSString *str=[[NSString alloc] initWithFormat:@" latitude:%f longitude:%f",coordinate.latitude,coordinate.longitude];
+    NSArray *coord = @[[NSNumber numberWithDouble:coordinate.latitude], [NSNumber numberWithDouble:coordinate.longitude]];
+    NSLog(@"%@",str);
+    
+    [self addTupleToUserDefaults:coord];
+    
+}
+
 
 - (void)didReceiveMemoryWarning
 {

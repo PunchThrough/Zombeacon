@@ -53,8 +53,20 @@
     #endif
     
     
+    
+    
     //temp location testing - delete and store locs better in future.
 
+    
+    
+    //make user defaults if not already made
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if (![defaults objectForKey:@"coords"]){
+        //create array for this default
+        NSArray *blankCoordArray = [[NSArray alloc] init];
+        [defaults setObject:blankCoordArray forKey:@"coords"];
+    }
+    
     return YES;
 }
 

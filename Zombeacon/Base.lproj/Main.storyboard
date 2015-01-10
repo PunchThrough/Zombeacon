@@ -54,11 +54,11 @@
             </objects>
             <point key="canvasLocation" x="384" y="378"/>
         </scene>
-        <!--View Controller-->
+        <!--Map View Controller-->
         <scene sceneID="uD1-7k-amA">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mIr-h8-yVa" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="0R6-i9-y7L" sceneMemberID="viewController">
+                <viewController id="0R6-i9-y7L" customClass="MapViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="sIU-pg-3Eq"/>
                         <viewControllerLayoutGuide type="bottom" id="T2r-k4-xdz"/>
@@ -68,21 +68,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="XMb-s2-b9M">
-                                <rect key="frame" x="-6" y="64" width="326" height="446"/>
+                                <rect key="frame" x="-6" y="64" width="326" height="515"/>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uHN-UX-3ZK">
-                                <rect key="frame" x="34" y="518" width="46" height="30"/>
-                                <state key="normal" title="Back">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="3F4-Jq-JK1"/>
+                    <connections>
+                        <outlet property="mapView" destination="XMb-s2-b9M" id="2kr-E3-wPd"/>
+                    </connections>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="1042" y="282"/>
+            <point key="canvasLocation" x="1156" y="306"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

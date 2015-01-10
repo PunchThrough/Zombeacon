@@ -31,6 +31,7 @@
 		67E05AB218BC3BCC00F0AFD8 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67E05AB118BC3BCC00F0AFD8 /* CoreBluetooth.framework */; };
 		67E05AB418BC3BD200F0AFD8 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67E05AB318BC3BD200F0AFD8 /* CoreLocation.framework */; };
 		6F2E72831A5F44BE00F85FE6 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F2E72821A5F44BE00F85FE6 /* MapKit.framework */; };
+		6F2E72861A5F667D00F85FE6 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2E72851A5F667D00F85FE6 /* MapViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,8 @@
 		67E05AB118BC3BCC00F0AFD8 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		67E05AB318BC3BD200F0AFD8 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		6F2E72821A5F44BE00F85FE6 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		6F2E72841A5F667D00F85FE6 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = SOURCE_ROOT; };
+		6F2E72851A5F667D00F85FE6 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +163,8 @@
 				67211E0818C1204900262280 /* AppDelegate.m */,
 				67211E0918C1204900262280 /* ViewController.h */,
 				67211E0A18C1204900262280 /* ViewController.m */,
+				6F2E72841A5F667D00F85FE6 /* MapViewController.h */,
+				6F2E72851A5F667D00F85FE6 /* MapViewController.m */,
 				673E677D18C1218100F0235E /* Images.xcassets */,
 				67E05A8318BC3A9700F0AFD8 /* Supporting Files */,
 			);
@@ -225,6 +230,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Punch Through Design";
 				TargetAttributes = {
+					67E05A7818BC3A9700F0AFD8 = {
+						DevelopmentTeam = BDVP9J5VD7;
+					};
 					67E05A9918BC3A9700F0AFD8 = {
 						TestTargetID = 67E05A7818BC3A9700F0AFD8;
 					};
@@ -285,6 +293,7 @@
 				67211E0C18C1204900262280 /* ViewController.m in Sources */,
 				67211E0E18C1206700262280 /* main.m in Sources */,
 				67211E0B18C1204900262280 /* AppDelegate.m in Sources */,
+				6F2E72861A5F667D00F85FE6 /* MapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
